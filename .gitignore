@@ -1,0 +1,18 @@
+# Scala
+/project/target/
+/target/
+
+
+# Intellij Idea
+/.idea/
+
+# chisel testers
+/test_run_dir/
+
+# Chisel compiler
+*.v
+*.fir
+*.json
+
+# treadle
+*.vcd
