@@ -25,7 +25,7 @@ class Blink extends IceSugarTop {
   blue := counter(25)
 }
 
-object VerilogGenerator extends App {
+object BlinkGenerator extends App {
   val pcf =
     """set_io clock 35
       |set_io rgb_0 39
@@ -33,5 +33,6 @@ object VerilogGenerator extends App {
       |set_io rgb_2 41
       |""".stripMargin
   val bin = IceSugar.makeBin(new Blink, pcf)
-  IceSugar.program(bin, "/run/media/kevin/iCELink/")
+  val iceLinkPath = "/run/media/kevin/iCELink/"
+  IceSugar.program(bin, iceLinkPath)
 }
