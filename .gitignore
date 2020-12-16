@@ -9,6 +9,9 @@
 # chisel testers
 /test_run_dir/
 
+# fpga builds
+/build/
+
 # Chisel compiler
 *.v
 *.fir
