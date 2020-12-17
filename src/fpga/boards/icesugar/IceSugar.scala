@@ -52,11 +52,13 @@ object IceSugar {
 
     // run nextpnr
     val ascFile = topName + ".asc"
+    val freq = top.clockFrequency / 1000 / 1000
+    require(freq * 1000 * 1000 == top.clockFrequency)
     val nextpnrCmd = List("nextpnr-ice40",
       "-l", "next.log",
       "--up5k",
       "--package", "sg48",
-      "--freq", top.clockFrequency.toString,
+      "--freq", freq.toString,
       "--pcf", pcfFile,
       "--json", jsonFile,
       "--asc", ascFile
@@ -100,7 +102,7 @@ case class BinFile(path: String)
 
 trait IceSugarTop extends MultiIOModule with RequireAsyncReset {
   // 12 MHz Clock
-  def clockFrequency: Int = 12
+  def clockFrequency: Long = 12000000
 
   // FPGA Bitstream Reset
   // The IceSugar board has a push button connected to CRESET_B which will
