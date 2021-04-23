@@ -24,20 +24,13 @@ class LEDToggle extends IceSugarTop {
   rgb <> toggle.io.toLed
   val (blue, red, green) = (toggle.io.pwm(0), toggle.io.pwm(1), toggle.io.pwm(2))
 
-  //TODO: Why does this not properly toggle the LED?
-//  val REDToggle = RegInit(false.B)
-//  when (toggle.io.channel.bits === 114.U) {
-//    REDToggle := !REDToggle
-//  }
-
-  //TODO: For some reason, both 9 and r turns on LED, both s and n turn it off
   val REDToggle = RegInit(false.B)
-  when (toggle.io.channel.bits === 114.U) {
-    REDToggle := true.B
-  }.elsewhen(toggle.io.channel.bits === 115.U) {
-    REDToggle := false.B
+  when (toggle.io.channel.fire()) {
+    //switch
+    when(toggle.io.channel.bits === 114.U) {
+      REDToggle := !REDToggle
+    }
   }
-
   red := REDToggle
   green := 0.U
   blue := 0.U
