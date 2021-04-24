@@ -5,9 +5,10 @@
 package design
 
 import chisel3._
-import chisel.lib.uart.LEDInput
+import chisel.lib.uart.{BufferedTx, Rx, UartIO}
 import chisel3.experimental.Analog
 import fpga.boards.icesugar._
+import fpga.ip.ice40.RGBLedDriver
 
 class LEDToggle extends IceSugarTop {
   val toggle = Module(new LEDInput(frequency = clockFrequency.toInt, baudRate = 115200))
@@ -34,6 +35,31 @@ class LEDToggle extends IceSugarTop {
   red := REDToggle
   green := 0.U
   blue := 0.U
+}
+
+/** Combine RGB and Input/Output. */
+class LEDInput(frequency: Int, baudRate: Int) extends Module {
+  val io = IO(new Bundle {
+    val txd = Output(UInt(1.W))
+    val rxd = Input(UInt(1.W))
+    val channel = new UartIO()
+    val powerUp = Input(Bool())
+    val enabled = Input(Bool())
+    val pwm = Input(Vec(3, Bool()))
+    val toLed = Vec(3, Analog(1.W))
+  })
+  val tx = Module(new BufferedTx(frequency, baudRate))
+  val rx = Module(new Rx(frequency, baudRate))
+  io.txd := tx.io.txd
+  rx.io.rxd := io.rxd
+  tx.io.channel <> rx.io.channel
+  io.channel <> rx.io.channel
+
+  val leds = Module(new RGBLedDriver(8, 8, 8))
+  leds.io.powerUp := io.powerUp
+  leds.io.enabled := io.enabled
+  leds.io.pwm := io.pwm
+  leds.io.toLed <> io.toLed
 }
 
 object LEDToggleGenerator extends App {

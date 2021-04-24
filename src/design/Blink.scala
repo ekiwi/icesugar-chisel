@@ -10,9 +10,9 @@ import fpga.boards.icesugar._
 import fpga.ip.ice40._
 
 class Blink extends IceSugarTop {
-  val leds = Module(new RGBLedDriver(8, 8, 8))
-  
   val rgb = IO(Vec(3, Analog(1.W)))
+
+  val leds = Module(new RGBLedDriver(8, 8, 8))
   rgb <> leds.io.toLed
   leds.io.powerUp := true.B
   leds.io.enabled := true.B
@@ -20,8 +20,8 @@ class Blink extends IceSugarTop {
 
   val counter = RegInit(0.U(26.W))
   counter := counter + 1.U
-  red := counter(23)
-  green := counter(24)
+  red := counter(24)
+  green := counter(22)
   blue := counter(25)
 }
 
