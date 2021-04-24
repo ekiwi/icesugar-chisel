@@ -21,7 +21,7 @@ class Blink extends IceSugarTop {
   val counter = RegInit(0.U(26.W))
   counter := counter + 1.U
   red := counter(24)
-  green := counter(22)
+  green := counter(23)
   blue := counter(25)
 }
 

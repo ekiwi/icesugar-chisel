@@ -7,6 +7,7 @@ package design
 import chisel3._
 import chisel.lib.uart.{BufferedTx, Rx, UartIO}
 import chisel3.experimental.Analog
+import chisel3.util._
 import fpga.boards.icesugar._
 import fpga.ip.ice40.RGBLedDriver
 
@@ -25,16 +26,22 @@ class LEDToggle extends IceSugarTop {
   rgb <> toggle.io.toLed
   val (blue, red, green) = (toggle.io.pwm(0), toggle.io.pwm(1), toggle.io.pwm(2))
 
-  val REDToggle = RegInit(false.B)
+  //Begin: Toggle LEDS logic
+  val REDtoggle = RegInit(false.B)
+  val GREENtoggle = RegInit(false.B)
+  val BLUEtoggle = RegInit(false.B)
+
   when (toggle.io.channel.fire()) {
-    //switch
-    when(toggle.io.channel.bits === 114.U) {
-      REDToggle := !REDToggle
+    switch (toggle.io.channel.bits) {
+      is (114.U) {REDtoggle := !REDtoggle}  //Toggle red on (lowercase) r press
+      is (103.U) {GREENtoggle := !GREENtoggle}  //Toggle green on (lowercase) g press
+      is (98.U)  {BLUEtoggle := !BLUEtoggle}  //Toggle blue on (lowercase) b press
     }
   }
-  red := REDToggle
-  green := 0.U
-  blue := 0.U
+
+  red := REDtoggle
+  green := GREENtoggle
+  blue := BLUEtoggle
 }
 
 /** Combine RGB and Input/Output. */
