@@ -154,7 +154,7 @@ class BufferedTx(frequency: Int, baudRate: Int) extends Module {
 /**
  * Send a string.
  */
-class Sender(frequency: Int, baudRate: Int) extends Module {
+class Sender(frequency: Int, baudRate: Int, output: String="Hello World!") extends Module {
   val io = IO(new Bundle {
     val txd = Output(UInt(1.W))
   })
@@ -163,7 +163,7 @@ class Sender(frequency: Int, baudRate: Int) extends Module {
 
   io.txd := tx.io.txd
 
-  val msg = "Hello World!"
+  val msg = output
   val text = VecInit(msg.map(_.U))
   val len = msg.length.U
 
@@ -177,6 +177,9 @@ class Sender(frequency: Int, baudRate: Int) extends Module {
   }
 }
 
+/** 
+ * Send what is received.
+ */
 class Echo(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
     val txd = Output(UInt(1.W))

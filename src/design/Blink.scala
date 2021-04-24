@@ -33,6 +33,6 @@ object BlinkGenerator extends App {
       |set_io rgb_2 41
       |""".stripMargin
   val bin = IceSugar.makeBin(new Blink, pcf)
-  val iceLinkPath = "/run/media/kevin/iCELink/"
+  val iceLinkPath = "/run/media/brandon/iCELink/"
   IceSugar.program(bin, iceLinkPath)
 }

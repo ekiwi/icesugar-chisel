@@ -10,8 +10,8 @@ import fpga.boards.icesugar._
 
 /** Uses a UART transmitter from the ip-contributions library to send "Hello World!" on startup. */
 class HelloWorld extends IceSugarTop {
+  val sender = Module(new Sender(frequency = clockFrequency.toInt, baudRate = 115200, "Hello World Test"))
   val tx = IO(Output(UInt(1.W)))
-  val sender = Module(new Sender(frequency = clockFrequency.toInt, baudRate = 115200))
   tx := sender.io.txd
 }
 
@@ -21,6 +21,6 @@ object HelloWorldGenerator extends App {
       |set_io tx 6
       |""".stripMargin
   val bin = IceSugar.makeBin(new HelloWorld, pcf)
-  val iceLinkPath = "/run/media/kevin/iCELink/"
+  val iceLinkPath = "/run/media/brandon/iCELink/"
   IceSugar.program(bin, iceLinkPath)
 }
