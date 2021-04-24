@@ -15,6 +15,8 @@ import chisel3.util._
 class UartIO extends DecoupledIO(UInt(8.W)) {
   override def cloneType: this.type = new UartIO().asInstanceOf[this.type]
 }
+
+
 /**
  * Transmit part of the UART.
  * A minimal version without any additional buffering.
@@ -176,7 +178,7 @@ class Sender(frequency: Int, baudRate: Int, output: String="Hello World!") exten
 }
 
 /** 
- * Send what is recieved.
+ * Send what is received.
  */
 class Echo(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
