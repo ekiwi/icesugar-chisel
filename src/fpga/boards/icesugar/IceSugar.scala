@@ -100,7 +100,7 @@ object IceSugar {
 case class BinFile(path: String)
 
 
-trait IceSugarTop extends MultiIOModule with RequireAsyncReset {
+trait IceSugarTop extends Module with RequireAsyncReset {
   // 12 MHz Clock
   def clockFrequency: Long = 12000000
 

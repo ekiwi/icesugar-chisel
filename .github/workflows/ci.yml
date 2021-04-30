@@ -1,0 +1,31 @@
+name: unit tests
+
+on:
+  push:
+  pull_request:
+  schedule:
+    # test every day at noon (PST) to check for new dependency changes
+    - cron: '0 19 * * *'
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Verilator
+      run: |
+        sudo apt-get install -y verilator
+        verilator --version
+
+    - name: Install Scala
+      uses: olafurpg/setup-scala@v10
+      with:
+        java-version: openjdk@1.11
+
+    - name: Compile
+      run: sbt compile
+
+    - name: Unit Tests
+      run: sbt test
